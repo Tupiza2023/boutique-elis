@@ -31,3 +31,22 @@ export function generateRandomData(pagesCount = 7) {
 
   return data;
 }
+
+export function buildFilterParams(params) {
+  if (params === '') return '';
+  return `&name=ilike.*${params}*`;
+}
+
+export function buildQueryParams(params) {
+  if (!params) throw new Error('params is required');
+  const { orderBy, order } = params;
+
+  return `&order=${orderBy}.${order}`;
+}
+
+export function buildLimitHeader(params) {
+  if (!params) throw new Error('params is required');
+  const { minLimit, maxLimit } = params;
+
+  return { header: 'Range', value: `${minLimit}-${maxLimit}` };
+}

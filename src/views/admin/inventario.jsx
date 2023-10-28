@@ -1,9 +1,8 @@
 import { AddCategory } from '@/components/add-categoria';
+import { AddProduct } from '@/components/add-product';
 import { CategoriaTable } from '@/components/tables';
 import ProductsTable from '@/components/tables/products-table';
-import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus } from 'lucide-react';
 
 export function InventarioView() {
   return (
@@ -13,12 +12,9 @@ export function InventarioView() {
         <TabsTrigger value="category">Categorias</TabsTrigger>
       </TabsList>
       <TabsContent value="inventory">
-        <section className="flex flex-col w-full mt-3 space-y-2 md:space-y-16">
+        <section className="flex flex-col w-full  space-y-2 md:space-y-5">
           <div className="flex justify-end space-x-4">
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Nuevo Producto
-            </Button>
+            <AddProduct />
           </div>
           <ProductsTable />
         </section>

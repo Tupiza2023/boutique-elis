@@ -21,8 +21,7 @@ export function withAuth(Component) {
       };
 
       checkAuth();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [router]);
 
     if (loading) {
       <div className="h-screen">
