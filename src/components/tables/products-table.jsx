@@ -19,7 +19,7 @@ import { formatCurrency, formatDate, formatTime } from '@/lib/formaters';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BarLoader } from 'react-spinners';
-import { MoreVertical, SearchIcon } from 'lucide-react';
+import { MoreVertical } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useDebouce } from '@/hooks/use-debouce';
 import { useQueryProductsStore } from '@/store/products-query-store';
@@ -30,7 +30,7 @@ export default function ProductsTable() {
   if (error) return <p>Error: {error.message}</p>;
   return (
     <div className="space-y-2 p-4 border rounded-sm">
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-col justify-start md:justify-between md:flex-row space-y-2 md:space-x-2">
         <InputSearchProducts />
         <TablePagination />
       </div>
@@ -145,12 +145,9 @@ const InputSearchProducts = () => {
   }, [debouceQuery, setSearch]);
   return (
     <div className="relative w-full max-w-md">
-      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <SearchIcon className="h-5 w-5 text-gray-400" />
-      </div>
       <Input
         type="text"
-        className="block w-full pl-10 pr-3 py-2 sm:text-sm transition duration-150 ease-in-out"
+        className="block w-full sm:text-sm transition duration-150 ease-in-out"
         placeholder="Buscar por nombre"
         onChange={e => setQuery(e.target.value)}
         value={query}
