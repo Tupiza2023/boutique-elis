@@ -20,9 +20,7 @@ export function MainClientLayout({ children, titulo }) {
       </Head>
       <div className={poppins.className}>
         <Navbar links={links} isClient={true} />
-        <main className="flex justify-center items-center mx-auto max-w-screen-lg h-full px-4 lg:px-0">
-          {children}
-        </main>
+        <main>{children}</main>
       </div>
     </>
   );

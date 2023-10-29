@@ -1,7 +1,9 @@
-const { default: Link } = require('next/link');
-const { GridTileImage } = require('./tile');
+import Link from 'next/link';
+import { GridTileImage } from '@/components/grid/tile';
+import { useProducts } from '@/hooks/use-products';
+import { BeatLoader } from 'react-spinners';
 
-function ThreeItemGridItem({ item, size, priorty }) {
+function ThreeItemGridItem({ item, size, priority }) {
   return (
     <div
       className={
@@ -15,7 +17,7 @@ function ThreeItemGridItem({ item, size, priorty }) {
         href={`/product/${item.handle}`}
       >
         <GridTileImage
-          src={item.featuredImage.url}
+          src={item.featuredimageurl}
           fill
           sizes={
             size === 'full'
@@ -23,12 +25,12 @@ function ThreeItemGridItem({ item, size, priorty }) {
               : '(min-width: 768px) 33vw, 100vw'
           }
           priority={priority}
-          alt={item.title}
+          alt={item.name}
           label={{
             position: size === 'full' ? 'center' : 'bottom',
-            title: item.title,
-            amount: item.priceRange.maxVariantPrice.amount,
-            currencyCode: item.priceRange.maxVariantPrice.currencyCode,
+            title: item.name,
+            amount: item.price,
+            currencyCode: item.currencycode,
           }}
         />
       </Link>
@@ -37,7 +39,15 @@ function ThreeItemGridItem({ item, size, priorty }) {
 }
 export function ThreeItemGrid() {
   // Collections that start with `hidden-*` are hidden from the search page.
-  const homepageItems = [];
+  const { data, error, isLoading } = useProducts();
+  if (isLoading)
+    return (
+      <div>
+        <BeatLoader color="#36d7b7" />
+      </div>
+    );
+  if (error) return <div>Error: {error.message}</div>;
+  const homepageItems = data;
 
   if (!homepageItems[0] || !homepageItems[1] || !homepageItems[2]) return null;
 
@@ -51,9 +61,3 @@ export function ThreeItemGrid() {
     </section>
   );
 }
-
-/*
-    item: {
-
-    }
-*/

@@ -33,6 +33,7 @@ export const useProducts = () => {
     mutate,
     isLoading,
   } = useSWR([url, start, end], fetcher);
+
   const hasMore = Boolean(resp && end < resp.total - 1);
 
   return { data: resp ? resp.data : null, error, isLoading, mutate, hasMore };

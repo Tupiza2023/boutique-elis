@@ -34,8 +34,9 @@ export function formatTime(str) {
 }
 
 export function formatCurrency(price, currencyCode) {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat(undefined, {
     style: 'currency',
     currency: currencyCode,
-  }).format(price);
+    currencyDisplay: 'narrowSymbol',
+  }).format(parseFloat(price));
 }
