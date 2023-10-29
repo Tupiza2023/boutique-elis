@@ -5,7 +5,7 @@ export default function Checkout() {
   return (
     <MainClientLayout titulo={'Pagar orden'}>
       <section className="w-full flex justify-center mt-2">
-        <PaymentMethod />
+        {/* <PaymentMethod /> */}
       </section>
     </MainClientLayout>
   );

@@ -19,16 +19,12 @@ import {
 } from '../ui/select';
 import { Button } from '../ui/button';
 import { RadioGroupItem, RadioGroup } from '../ui/radio-group';
-import { useRouter } from 'next/router';
+import { useCartStore } from '@/store/cart-store';
 
 export function PaymentMethod() {
-  const router = useRouter();
   const { products } = useCartStore();
   const isEmpty = products.length === 0;
-  if (isEmpty) {
-    router.push('/');
-  }
-
+  if (isEmpty) return <div>Carrito Vacio</div>;
   return (
     <Card className="max-w-screen-md">
       <CardHeader>
