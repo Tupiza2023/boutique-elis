@@ -68,7 +68,7 @@ export default function ProductsTable() {
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         <Link
-                          href={`/admin/inventario/${product.handle}/edit`}
+                          href={`/admin/inventario/${product.handle}/editar`}
                           passHref
                           legacyBehavior
                         >
