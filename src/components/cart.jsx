@@ -14,7 +14,7 @@ import { Separator } from './ui/separator';
 import Image from 'next/image';
 import { formatCurrency } from '@/lib/formaters';
 import { useRouter } from 'next/router';
-
+const forUSDtoBs = 6.96;
 export function Cart() {
   const router = useRouter();
   const { products, setTotal } = useCartStore();
