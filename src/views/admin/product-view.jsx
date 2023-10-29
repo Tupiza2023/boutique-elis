@@ -9,17 +9,15 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { deleteData } from '@/supabase/delete';
+import { deleteData, deleteFile } from '@/supabase/delete';
 import { useToast } from '@/components/ui/use-toast';
 
-export function ProductView() {
+export function ProductView({ slug }) {
   const router = useRouter();
-  const { slug } = router.query;
   const { data, isLoading, error } = useData({
     url: `${productsUrl}?handle=eq.${slug}&select=*`,
     shouldFetch: slug !== undefined,
@@ -41,11 +39,25 @@ export function ProductView() {
         variant: 'destructive',
       });
     } else {
-      toast({
-        title: 'Producto eliminado',
-        description: 'El producto ha sido eliminado correctamente.',
+      const { error } = await deleteFile({
+        buckedName: 'images',
+        name: product.handle,
       });
-      router.push('/admin/inventario');
+      if (error) {
+        toast({
+          title: 'Error',
+          description:
+            'Ha ocurrido un error al eliminar el producto, intenta de nuevo.',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Eliminado',
+          description: 'El producto ha sido eliminado correctamente.',
+          variant: 'success',
+        });
+        router.push('/admin/inventario');
+      }
     }
   };
 

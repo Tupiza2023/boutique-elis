@@ -63,7 +63,7 @@ export function AddProduct() {
   );
 }
 
-const currencyCodes = [
+export const currencyCodes = [
   {
     label: 'Bolivianos (Bs)',
     value: 'BOB',
