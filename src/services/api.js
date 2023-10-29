@@ -13,6 +13,7 @@ const supabaseApi = axios.create({
 });
 const tagsUrl = 'rest/v1/tags';
 const productsUrl = 'rest/v1/productos';
+const ordersUrl = '/rest/v1/ordenes';
 const bucketUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public`;
 
-export { supabaseApi, tagsUrl, bucketUrl, productsUrl };
+export { supabaseApi, tagsUrl, bucketUrl, productsUrl, ordersUrl };

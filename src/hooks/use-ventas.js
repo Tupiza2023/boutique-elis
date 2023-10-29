@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { buildFilterParams, buildQueryParams } from '@/lib/utils';
-import { useQueryProductsStore } from '@/store/products-query-store';
 import { supabaseApi } from '@/services/api';
+import { useQueryVentasStore } from '@/store/ventas-query-store';
 
 const fetcher = args =>
   supabaseApi
@@ -20,11 +20,12 @@ const fetcher = args =>
       };
     });
 
-export const useProducts = () => {
-  const { baseUrl, search, queryParams } = useQueryProductsStore();
+export const useVentas = () => {
+  const { baseUrl, search, queryParams } = useQueryVentasStore();
 
   const url = `${baseUrl}${buildQueryParams(queryParams)}${buildFilterParams(
-    search
+    search,
+    'nombrecliente'
   )}`;
   const { minLimit: start, maxLimit: end } = queryParams;
   const {

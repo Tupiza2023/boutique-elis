@@ -32,9 +32,9 @@ export function generateRandomData(pagesCount = 7) {
   return data;
 }
 
-export function buildFilterParams(params) {
+export function buildFilterParams(params, filter = 'name') {
   if (params === '') return '';
-  return `&name=ilike.*${params}*`;
+  return `&${filter}=ilike.*${params}*`;
 }
 
 export function buildQueryParams(params) {
