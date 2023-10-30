@@ -28,9 +28,11 @@ export function SearchView() {
     <>
       {searchValue ? (
         <p className="mb-4">
-          {products.length === 0
-            ? 'There are no products that match '
-            : `Showing ${products.length} ${resultsText} for `}
+          {data.products.length === 0
+            ? 'Sin resultados para '
+            : `Mostrando ${data.products.length} ${
+                total > 1 ? 'resultados' : 'resultado'
+              } para `}
           <span className="font-bold">&quot;{searchValue}&quot;</span>
         </p>
       ) : null}

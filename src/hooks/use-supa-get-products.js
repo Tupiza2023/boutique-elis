@@ -27,8 +27,8 @@ function reducer(state, action) {
 export function useSupaGetProducts() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const router = useRouter();
-  const sort = router.query.sort;
-  const search = router.query.search;
+  let sort = router.query.sort;
+  const search = router.query.q;
   const collection = router.query.collection;
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export function useSupaGetProducts() {
     const fetchProducts = async () => {
       dispatch({ type: 'SET_LOADING', payload: true });
       const { data, error, count } = await fetchData({
-        sort: sort.split('-'),
+        sort: sort?.split('-') ?? ['createdat', 'desc'],
         range: state.range,
         query: search || collection,
         findIn: search ? 'name' : 'tag',
