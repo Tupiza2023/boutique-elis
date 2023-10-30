@@ -81,6 +81,7 @@ const ListOfProducts = () => {
 
 const ProductItem = ({ product }) => {
   const { setProducts, decreaseQuantity, deleteProduct } = useCartStore();
+  if (!product) return null;
   const handleDelete = id => {
     deleteProduct(id);
   };

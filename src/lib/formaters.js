@@ -33,7 +33,7 @@ export function formatTime(str) {
   return `${formattedHours}:${formattedMinutes}`;
 }
 
-export function formatCurrency(price, currencyCode) {
+export function formatCurrency(price, currencyCode = 'BOB') {
   return new Intl.NumberFormat(undefined, {
     style: 'currency',
     currency: currencyCode,

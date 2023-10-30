@@ -20,11 +20,67 @@ import {
 import { Button } from '../ui/button';
 import { RadioGroupItem, RadioGroup } from '../ui/radio-group';
 import { useCartStore } from '@/store/cart-store';
+import { useState } from 'react';
+import { supabase } from '@/supabase/client';
+import { useToast } from '../ui/use-toast';
+import { useRouter } from 'next/router';
+import { PuffLoader } from 'react-spinners';
 
+const formatPayloadData = products => {
+  return products.map(product => {
+    return {
+      id: product.id,
+      quantity: product.quantity,
+    };
+  });
+};
 export function PaymentMethod() {
-  const { products } = useCartStore();
+  const router = useRouter();
+  const { products, total, setProducts, setTotal } = useCartStore();
+
+  const [values, setValues] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
   const isEmpty = products.length === 0;
+
   if (isEmpty) return <div>Carrito Vacio</div>;
+  const onChange = e => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleSubmit = async e => {
+    setIsLoading(true);
+    e.preventDefault();
+    const datatosave = {
+      ...values,
+      data: products,
+      estado: 'Enviado',
+      total: total,
+    };
+    const { error } = await supabase.from('ordenes').insert(datatosave);
+    await supabase.rpc('update_product_quantities', {
+      payload: formatPayloadData(products),
+    });
+    if (error) {
+      toast({
+        title: 'Error',
+        description: 'No se pudo registrar la orden, intente de nuevo',
+        variant: 'destructive',
+      });
+      setIsLoading(false);
+    } else {
+      toast({
+        title: 'Orden registrada',
+        description: 'La orden se registro correctamente',
+      });
+      setIsLoading(false);
+      setProducts([]);
+      setTotal(0);
+      router.push('/');
+    }
+  };
   return (
     <Card className="max-w-screen-md">
       <CardHeader>
@@ -34,7 +90,7 @@ export function PaymentMethod() {
           cuenta
         </CardDescription>
       </CardHeader>
-      <form action="">
+      <form onSubmit={handleSubmit}>
         <CardContent className="grid gap-6">
           <RadioGroup defaultValue="card" className="grid grid-cols-3 gap-4">
             <div>
@@ -56,7 +112,7 @@ export function PaymentMethod() {
                   <rect width="20" height="14" x="2" y="5" rx="2" />
                   <path d="M2 10h20" />
                 </svg>
-                Card
+                Tarjeta
               </Label>
             </div>
             <div>
@@ -96,6 +152,7 @@ export function PaymentMethod() {
               id="nombrecliente"
               name="nombrecliente"
               placeholder="Nombre completo"
+              onChange={onChange}
             />
           </div>
           <div className="grid gap-2">
@@ -104,11 +161,17 @@ export function PaymentMethod() {
               id="direccioncliente"
               name="direccioncliente"
               placeholder="Dirección de envío"
+              onChange={onChange}
             />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="genro">Género</Label>
-            <Input id="genero" name="genero" placeholder="Género (opcional)" />
+            <Input
+              id="genero"
+              name="genero"
+              placeholder="Género (opcional)"
+              onChange={onChange}
+            />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="number">Número de targeta</Label>
@@ -162,7 +225,13 @@ export function PaymentMethod() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full">Pagar</Button>
+          {isLoading ? (
+            <PuffLoader color="#36d7b7" />
+          ) : (
+            <Button className="w-full" type="submit">
+              Pagar
+            </Button>
+          )}
         </CardFooter>
       </form>
     </Card>
