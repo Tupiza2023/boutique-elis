@@ -8,8 +8,7 @@ const poppins = Poppins({
 });
 const links = [
   { href: '/', label: 'Inicio' },
-  { href: '/store/', label: 'Catálogo' },
-  { href: '/store/historial', label: 'Historial' },
+  { href: '/search?sort=createdat-desc', label: 'Catálogo' },
 ];
 export function MainClientLayout({ children, titulo }) {
   return (

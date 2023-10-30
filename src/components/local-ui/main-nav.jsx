@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 import { cn } from '@/lib/utils';
+import { usePathname, useRouter } from 'next/navigation';
 
 export function MainNav({ className, links = [], ...props }) {
-  const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <div
@@ -12,7 +12,7 @@ export function MainNav({ className, links = [], ...props }) {
       {...props}
     >
       {links.map((link, index) => {
-        const isActive = router.pathname === link.href;
+        const isActive = pathname === link.href.split('?')[0];
         return (
           <Link key={index} href={link.href} legacyBehavior passHref>
             <a
