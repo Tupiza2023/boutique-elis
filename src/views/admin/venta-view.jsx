@@ -7,7 +7,6 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -18,10 +17,10 @@ export function VentaView({ id }) {
     url: `${ordersUrl}?id=eq.${id}&select=*`,
     shouldFetch: !!id,
   });
-  const venta = data?.[0];
-  console.log(venta);
+
   if (isLoading) return <div>Cargando...</div>;
   if (error) return <div>Error: {error.message}</div>;
+  const venta = data[0];
   return (
     <div className="w-full">
       <p className="text-xl font-semibold">Orden #{venta.id}</p>
@@ -57,7 +56,7 @@ export function VentaView({ id }) {
         </div>
 
         <div className="max-w-screen-lg border p-2 rounded">
-          <TableBasic products={venta.data.products} total={venta.total} />
+          <TableBasic products={venta.data} total={venta.total} />
         </div>
       </div>
     </div>
@@ -65,6 +64,7 @@ export function VentaView({ id }) {
 }
 
 function TableBasic({ products, total }) {
+  console.log(products);
   return (
     <Table>
       <TableCaption>Detalle de compra</TableCaption>
@@ -94,7 +94,7 @@ function TableBasic({ products, total }) {
         ))}
         <div className="flex flex-row mt-4 justify-start space-x-2">
           <p className=" font-medium">Total:</p>
-          <p>{formatCurrency(total, products[0].currencycode)}</p>
+          <p>{formatCurrency(total, products[0]?.currencycode)}</p>
         </div>
       </TableBody>
     </Table>
