@@ -58,6 +58,7 @@ export function PaymentMethod() {
       data: products,
       estado: 'Enviado',
       total: total,
+      createdat: new Date().toISOString(),
     };
     const { error } = await supabase.from('ordenes').insert(datatosave);
     await supabase.rpc('update_product_quantities', {
