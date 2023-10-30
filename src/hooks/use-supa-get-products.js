@@ -1,5 +1,5 @@
 import { supabase } from '@/supabase/client';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useEffect, useReducer } from 'react';
 
 const initialState = {
@@ -26,14 +26,17 @@ function reducer(state, action) {
 
 export function useSupaGetProducts() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const sort = searchParams.get('sort');
-  const search = searchParams.get('q');
+  const sort = router.query.sort;
+  const search = router.query.search;
+  const collection = router.query.collection;
 
   useEffect(() => {
     if (sort === null) {
       router.push({ search: '?sort=createdat-desc' });
+      return;
+    }
+    if (!router.isReady) {
       return;
     }
     const fetchProducts = async () => {
@@ -41,7 +44,8 @@ export function useSupaGetProducts() {
       const { data, error, count } = await fetchData({
         sort: sort.split('-'),
         range: state.range,
-        query: search,
+        query: search || collection,
+        findIn: search ? 'name' : 'tag',
       });
       dispatch({ type: 'SET_LOADING', payload: false });
       if (error) dispatch({ type: 'SET_ERROR', payload: error });
@@ -53,8 +57,7 @@ export function useSupaGetProducts() {
     };
     fetchProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort, state.range, search]);
-
+  }, [sort, state.range, search, collection, router.isReady]);
   return {
     data: state.data,
     isLoading: state.isLoading,
@@ -68,6 +71,7 @@ async function fetchData({
   sort: [column, orderSign],
   range: [start, end],
   query = null,
+  findIn,
 }) {
   let request = supabase
     .from('productos')
@@ -75,7 +79,7 @@ async function fetchData({
     .order(column, { ascending: orderSign === 'asc' })
     .range(start, end);
 
-  if (query) request = request.ilike('name', `%${query}%`);
+  if (query) request = request.ilike(findIn, `%${query}%`);
 
   const { data, error, count } = await request;
   return { data, error, count };
